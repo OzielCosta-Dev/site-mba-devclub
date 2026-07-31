@@ -192,7 +192,11 @@ export default function AboutStack() {
       </div>
 
       <div ref={setStackWrapper} className="relative h-full w-full">
-        <OrbitField container={stackWrapper} />
+        {/* Puramente decorativo; raios chegam a 450px e vazam pro resto da
+            página em telas estreitas, então some antes do breakpoint md. */}
+        <div className="hidden md:block">
+          <OrbitField container={stackWrapper} />
+        </div>
 
         {CARDS.map((card, i) => (
           <div
