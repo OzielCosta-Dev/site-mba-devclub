@@ -1,0 +1,251 @@
+@import "tailwindcss";
+
+@theme {
+  --color-void: #0a0a0a;
+  --color-surface: #131313;
+  --color-surface-2: #1a1a1a;
+  --color-ink: #f2f1ea;
+  --color-muted: #8a8a85;
+  --color-signal: #00e676;
+  --color-signal-dim: #0f9d58;
+  --color-ember: #ff8a3d;
+
+  --font-display: "Space Grotesk", sans-serif;
+  --font-body: "Inter", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+  --font-saber: "Anton", sans-serif;
+
+  --animate-marquee: marquee 32s linear infinite;
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+  background: var(--color-void);
+}
+
+body {
+  background: var(--color-void);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--color-signal);
+  color: var(--color-void);
+}
+
+/* Star Wars logo-crawl homage for the header wordmark: condensed poster
+   font + dark outline + green glow, standing in for the classic
+   yellow bevel treatment (recolored to the site's --color-signal). */
+.wordmark-saber {
+  font-family: var(--font-saber);
+  -webkit-text-stroke: 1.25px #04150c;
+  text-shadow: 0 0 16px rgba(0, 230, 118, 0.55);
+}
+
+/* Compensates for the fixed header (h-24 = 6rem) so anchor-link
+   navigation doesn't land with the section title tucked behind it. */
+section[id] {
+  scroll-margin-top: 6rem;
+}
+
+/* Soft white halo for the header's "LED" look (nav icons, área do aluno).
+   Uses drop-shadow (not text-shadow) so it also renders on SVG icon
+   strokes, and stays a separate class from color so Tailwind's own
+   text-color / hover utilities keep working normally on the same element. */
+.led-glow {
+  filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.85)) drop-shadow(0 0 9px rgba(255, 255, 255, 0.35));
+}
+
+/* Órbita contínua para as "partículas" ao redor dos cards do About.
+   O .orbit-ring gira; o .orbit-dot fica na borda dele, então traça um
+   círculo. O raio é controlado por instância via width/height inline. */
+@keyframes orbit-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+.orbit-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border-radius: 9999px;
+  animation-name: orbit-spin;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+.orbit-dot {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  border-radius: 9999px;
+}
+
+/* Bolhas de tecnologia da seção de Formações: cada uma fica ancorada num
+   ponto fixo e seguro ao redor do notebook (definido em Formations.jsx) e
+   gira numa órbita PEQUENA e local em torno desse ponto — reaproveita o
+   .orbit-ring acima (mesmo giro contínuo do About), só que numa escala que
+   nunca alcança o notebook nem o texto. O ícone lá dentro contra-gira na
+   mesma velocidade pra não ficar de cabeça pra baixo enquanto viaja. */
+@keyframes tech-orbit-counter {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(-360deg); }
+}
+.tech-orbit-counter {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  animation-name: tech-orbit-counter;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+/* LED "webcam" do notebook: apagado em repouso, acende em verde quando o
+   cursor entra na tela (perto dos cards) — o mesmo gesto de "presença
+   detectada" do led-glow do header, só que como uma luz física de verdade. */
+.notebook-led {
+  background: #2a2a2a;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+.notebook-led.is-on {
+  background: var(--color-signal);
+  box-shadow: 0 0 6px 2px rgba(0, 230, 118, 0.9), 0 0 18px 6px rgba(0, 230, 118, 0.45);
+}
+
+/* Gotas de vidro no fundo de "Quem ensina": uma camada cinza sempre visível
+   (vidro embaçado) + uma segunda camada idêntica, verde, revelada só num
+   círculo que segue o cursor via mask-image — a "chuva" acende perto do
+   mouse, sem precisar recalcular distância pra cada gota em JS. */
+.glass-drop {
+  position: absolute;
+  border-radius: 9999px;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle at 32% 28%, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.12) 40%, rgba(255, 255, 255, 0.02) 65%, transparent 78%);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.4), inset 0 -1px 2px rgba(0, 0, 0, 0.5);
+}
+.glass-drop-glow {
+  background: radial-gradient(circle at 32% 28%, rgba(214, 255, 230, 0.95), rgba(0, 230, 118, 0.55) 42%, rgba(0, 230, 118, 0.18) 68%, transparent 80%);
+  box-shadow: 0 0 8px rgba(0, 230, 118, 0.85), inset 0 1px 1px rgba(255, 255, 255, 0.6);
+}
+.glass-glow-layer {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  -webkit-mask-image: radial-gradient(circle 190px at var(--spot-x, 50%) var(--spot-y, 50%), black 0%, black 55%, transparent 78%);
+  mask-image: radial-gradient(circle 190px at var(--spot-x, 50%) var(--spot-y, 50%), black 0%, black 55%, transparent 78%);
+}
+.glass-glow-layer.is-active {
+  opacity: 1;
+}
+
+/* Telas do setup de monitores em "Resultados": --glow (0 a 1) é escrito via
+   JS a cada mousemove, proporcional à distância do cursor até o centro de
+   cada tela — quanto mais perto, mais a borda e o brilho interno viram
+   verde-sinal. Nenhum React re-render por frame, só a custom property. */
+.monitor-screen {
+  --glow: 0;
+  transition: border-color 0.15s ease;
+  border-color: color-mix(in srgb, var(--color-surface-2) calc(100% - var(--glow) * 100%), var(--color-signal) calc(var(--glow) * 100%));
+  box-shadow: 0 0 calc(8px + 46px * var(--glow)) rgba(0, 230, 118, var(--glow));
+}
+.monitor-glow {
+  background: radial-gradient(circle at 50% 35%, rgba(0, 230, 118, calc(var(--glow) * 0.4)), transparent 70%);
+}
+
+/* Anel de "sonar" do botão flutuante de WhatsApp: um círculo que nasce do
+   tamanho do botão e cresce se dissipando, em loop — chama o olho sem
+   precisar de texto nem de badge. */
+@keyframes whatsapp-ping {
+  0% { transform: scale(1); opacity: 0.55; }
+  100% { transform: scale(1.9); opacity: 0; }
+}
+.whatsapp-fab-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: var(--color-signal);
+  animation: whatsapp-ping 2.4s ease-out infinite;
+}
+
+/* Cena da lua em "Sua vez" (CTA): bandeira tremulando (skew oscilando a
+   partir do mastro, transform-origin fica no elemento via style inline),
+   leve boiar do astronauta, e cometas caindo em diagonal com o rastro já
+   embutido no próprio gradiente da barra — anima só transform/opacity. */
+@keyframes flag-wave {
+  0%, 100% { transform: skewY(-5deg) scaleX(0.97); }
+  50% { transform: skewY(6deg) scaleX(1.03); }
+}
+.moon-flag {
+  animation: flag-wave 2.6s ease-in-out infinite;
+}
+
+@keyframes astro-float {
+  0%, 100% { transform: translate(580px, 558px) translateY(0); }
+  50% { transform: translate(580px, 558px) translateY(-6px); }
+}
+.moon-astro {
+  animation: astro-float 5s ease-in-out infinite;
+}
+
+@keyframes comet-fall {
+  0% { transform: translate(0, 0) rotate(-35deg); opacity: 0; }
+  10% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { transform: translate(-360px, 360px) rotate(-35deg); opacity: 0; }
+}
+.comet {
+  position: absolute;
+  height: 2px;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, transparent, rgba(234, 255, 242, 0.9) 65%, #eafff2 100%);
+  filter: drop-shadow(0 0 4px rgba(0, 230, 118, 0.75));
+  transform-origin: right center;
+  animation-name: comet-fall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+/* Campo de bolhas fixo atrás de toda a página (BubbleField.jsx): cada
+   bolha flutua num vaivém lento e aleatório via --drift-x/--drift-y
+   (setados por bolha em JS) — mesma técnica de "custom property por
+   instância + uma única @keyframes compartilhada" do resto do projeto. */
+.bubble {
+  position: absolute;
+  border-radius: 9999px;
+  transform: translate(-50%, -50%);
+  animation-name: bubble-float;
+  animation-timing-function: ease-in-out;
+  animation-direction: alternate;
+  animation-iteration-count: infinite;
+}
+.bubble-dark {
+  background: radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02) 45%, transparent 72%);
+}
+.bubble-glow {
+  background: radial-gradient(circle at 35% 30%, rgba(214, 255, 230, 0.9), rgba(0, 230, 118, 0.55) 55%, transparent 80%);
+  box-shadow: 0 0 12px rgba(0, 230, 118, 0.65);
+}
+@keyframes bubble-float {
+  from { translate: 0 0; }
+  to { translate: var(--drift-x) var(--drift-y); }
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -1,0 +1,38 @@
+export const PLANS = [
+  {
+    id: 'anual',
+    badge: 'Mais popular',
+    name: 'Assinatura Anual',
+    price: '197',
+    full: '1.970',
+    highlighted: true,
+    icon: 'calendar',
+    features: [
+      { text: 'Acesso a todas as formações e trilhas', bold: 'todas as formações e trilhas' },
+      { text: 'Acesso por 12 meses', bold: '12 meses' },
+      { text: 'Todos os projetos práticos da plataforma' },
+      { text: 'Certificado de conclusão' },
+      { text: 'Mentoria com tutores' },
+      { text: 'Acesso à comunidade de alunos' },
+    ],
+    cta: 'Quero essa vaga',
+  },
+  {
+    id: 'vitalicio',
+    badge: null,
+    name: 'Acesso Vitalício',
+    price: '397',
+    full: '3.970',
+    highlighted: false,
+    icon: 'infinity',
+    features: [
+      { text: 'Acesso vitalício (para sempre)', bold: 'Acesso vitalício' },
+      { text: 'Acesso a todas as formações e trilhas' },
+      { text: 'Todos os projetos práticos da plataforma' },
+      { text: 'Certificado de conclusão' },
+      { text: 'Mentoria com tutores' },
+      { text: 'Acesso à comunidade de alunos' },
+    ],
+    cta: 'Garantir vaga',
+  },
+]
